@@ -2,14 +2,16 @@ version: '3.8'
 
 services:
   app:
+    
     build:
       context: .
-      dockerfile: Dockerfile     # Dockerfile for the Flask app
+      dockerfile: Dockerfile
+    
     volumes:
-      - .:/app                  # Mount the current directory into the container
-      - ../model:/app/model      # Mount the model directory
+      - .:/app
+      - ../model:/app/model
+    
     ports:
-      - "5000:5000"             # Expose Flask on port 5000
-    environment:
-      - FLASK_ENV=development
-    command: python app.py      # Command to run the Flask app
+      - "5000:5000"
+    
+    command: python app.py

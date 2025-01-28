@@ -17,8 +17,6 @@ RUN apk add --no-cache \
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
 
-COPY ./ /app
+COPY ./ /app/
 
-EXPOSE 5000
-
-CMD ["python", "app.py"]
+CMD ["python", "machinelearningflow.py", "run"]

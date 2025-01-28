@@ -142,7 +142,7 @@ class MachineLearningFlow(FlowSpec):
 
         current_time_stamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
         self.model_version = "v"+current_time_stamp
-        self.model_path = os.path.join('model', 'diabetes_classifier_model.pkl')
+        self.model_path = os.path.join('model', 'diabetes_classifier_model_' + self.model_version + '.pkl')
         with open(self.model_path, 'wb') as f:
             pickle.dump(self.model, f)
 

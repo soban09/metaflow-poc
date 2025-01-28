@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  flow:
+    
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    volumes:
+      - .:/app
+      - ../dataset:/app/dataset
+      - ../model:/app/model
+    
+    environment:
+      - USERNAME=soban
+      - METAFLOW_DEFAULT_METADATA=service
+      - METAFLOW_SERVICE_URL=http://host.docker.internal:8080
+    
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    command: python machinelearningflow.py run

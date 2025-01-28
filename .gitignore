@@ -1,5 +1,7 @@
 *venv*
 *.
+.metaflow
 metaflow-ui
 metaflow-service
 bin
+metaflowconfig
