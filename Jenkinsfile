@@ -11,8 +11,7 @@ pipeline {
                 dir("${env.SERVER_DIR}") {
                     script {
                         echo "Running Flask App..."
-                        // Run Flask app in detached mode
-                        sh 'docker-compose up --build -d'
+                        sh 'sudo docker compose up'
                     }
                 }
             }
