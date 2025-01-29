@@ -12,21 +12,13 @@ pipeline {
         stage('Clone Metaflow services'){
             steps{
                 script {
-                    def repoDirectory = "${env.METAFLOW_UI}"
-                    if (!fileExists(repoDirectory)) {
-                        echo "Cloning the metaflow-ui repository..."
-                        git 'https://github.com/Netflix/metaflow-ui'
-                    } else {
-                        echo "Repository already exists, skipping clone."
-                    }
+                    sh 'rmdir metaflow-ui'
+                    echo "Cloning the metaflow-ui repository..."
+                    git 'https://github.com/Netflix/metaflow-ui.git'
 
-                    repoDirectory = "${env.METAFLOW_SERVICE}"
-                    if (!fileExists(repoDirectory)) {
-                        echo "Cloning the metaflow-service repository..."
-                        git 'https://github.com/Netflix/metaflow-service'
-                    } else {
-                        echo "Repository already exists, skipping clone."
-                    }
+                    sh 'rmdir metaflow-service'
+                    echo "Cloning the metaflow-service repository..."
+                    git 'https://github.com/Netflix/metaflow-service.git'
                 }
             }
             post {
