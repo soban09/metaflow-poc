@@ -44,6 +44,7 @@ pipeline {
                 dir("${env.METAFLOW_UI}") {
                     script{
                         sh "pwd"
+                        sh "ls -a"
                         echo 'Building metaflow-ui image'
                         sh 'sudo docker build --tag metaflow-ui:latest .'
                     }
@@ -63,6 +64,8 @@ pipeline {
             steps(){
                 dir("${env.METAFLOW_SERVICE}") {
                     script{
+                        sh "pwd"
+                        sh "ls -a"
                         echo 'Building metaflow-service'
                         sh 'sudo docker compose -f docker-compose.development.yml up'
                         sh 'sudo docker run -d -p 3000:3000 -e METAFLOW_SERVICE=http://localhost:8083/ metaflow-ui:latest'
