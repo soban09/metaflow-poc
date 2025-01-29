@@ -12,11 +12,11 @@ pipeline {
         stage('Clone Metaflow services'){
             steps{
                 script {
-                    sh 'rmdir metaflow-ui'
+                    sh '[ -d metaflow-ui ] && rm -r metaflow-ui'
                     echo "Cloning the metaflow-ui repository..."
                     git 'https://github.com/Netflix/metaflow-ui.git'
 
-                    sh 'rmdir metaflow-service'
+                    sh '[ -d metaflow-service ] && rm -r metaflow-service'
                     echo "Cloning the metaflow-service repository..."
                     git 'https://github.com/Netflix/metaflow-service.git'
                 }
