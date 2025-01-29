@@ -43,6 +43,7 @@ pipeline {
             steps(){
                 dir("${env.METAFLOW_UI}") {
                     script{
+                        sh "pwd"
                         echo 'Building metaflow-ui image'
                         sh 'sudo docker build --tag metaflow-ui:latest .'
                     }
