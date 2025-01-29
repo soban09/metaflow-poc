@@ -73,21 +73,41 @@ pipeline {
         }
 
         stage('Run Metaflow UI Backend'){
-            steps(){
+            steps {
                 dir("metaflow-service") {
-                    script{
-                        echo 'Building metaflow-service'
-                        sh 'sudo docker compose -f docker-compose.development.yml up'
+                    script {
+                        echo 'Starting metaflow-service backend...'
+                        sh 'sudo docker compose -f docker-compose.development.yml up -d'
+                        
+                        // Add a health check or sleep to ensure backend is ready
+                        echo 'Waiting for backend to be ready...'
+                        // sh 'sleep 30'  // Simple approach with fixed delay
+                        
+                        // Or better, use a health check loop (more reliable)
+                        sh '''
+                            timeout=60
+                            while ! curl -s http://localhost:8083/ > /dev/null; do
+                                if [ $timeout -le 0 ]; then
+                                    echo "Timeout waiting for backend"
+                                    exit 1
+                                fi
+                                echo "Waiting for backend to be ready..."
+                                sleep 5
+                                timeout=$((timeout - 5))
+                            done
+                        '''
+                        
+                        echo 'Starting metaflow-ui...'
                         sh 'sudo docker run -d -p 3000:3000 -e METAFLOW_SERVICE=http://localhost:8083/ metaflow-ui:latest'
                     }
                 }
             }
-            post{
+            post {
                 success {
-                    echo 'Metaflow-UI Backend started successfully!'
+                    echo 'Metaflow-UI Backend and UI started successfully!'
                 }
                 failure {
-                    echo 'There was an error running the Metaflow-UI Backend!'
+                    echo 'There was an error running the Metaflow services!'
                 }
             }
         }
