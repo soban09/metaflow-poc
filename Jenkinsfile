@@ -29,28 +29,14 @@ pipeline {
                 }
             }
         }
-        stage('Clone Metaflow UI'){
+        stage('Clone Metaflow Services'){
             steps{
                 script{
                     dir("metaflow-ui"){
                         echo 'Cloning into metaflow-ui...'
                         git 'https://github.com/Netflix/metaflow-ui.git'
                     }
-                }
-            }
-            post {
-                success {
-                    echo 'Services cloned successfully!'
-                }
-                failure {
-                    echo 'There was an error cloning the repositories!'
-                }
-            }
-        }
 
-        stage('Clone Metaflow service'){
-            steps{
-                script{
                     dir("metaflow-service"){
                         echo 'Cloning into metaflow-service...'
                         git 'https://github.com/Netflix/metaflow-service.git'
@@ -71,8 +57,6 @@ pipeline {
             steps(){
                 dir("metaflow-ui") {
                     script{
-                        sh "pwd"
-                        sh "ls -a"
                         echo 'Building metaflow-ui image'
                         sh 'sudo docker build --tag metaflow-ui:latest .'
                     }
@@ -92,8 +76,6 @@ pipeline {
             steps(){
                 dir("metaflow-service") {
                     script{
-                        sh "pwd"
-                        sh "ls -a"
                         echo 'Building metaflow-service'
                         sh 'sudo docker compose -f docker-compose.development.yml up'
                         sh 'sudo docker run -d -p 3000:3000 -e METAFLOW_SERVICE=http://localhost:8083/ metaflow-ui:latest'
