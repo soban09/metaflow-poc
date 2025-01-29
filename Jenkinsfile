@@ -20,7 +20,7 @@ pipeline {
                         echo "Repository already exists, skipping clone."
                     }
 
-                    def repoDirectory = ${env.METAFLOW_SERVICE}
+                    repoDirectory = ${env.METAFLOW_SERVICE}
                     if (!fileExists(repoDirectory)) {
                         echo "Cloning the metaflow-service repository..."
                         git(url : 'https://github.com/Netflix/metaflow-service')
