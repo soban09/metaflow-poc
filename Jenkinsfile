@@ -58,9 +58,7 @@ pipeline {
                         
                         // Add a health check or sleep to ensure backend is ready
                         echo 'Waiting for backend to be ready...'
-                        // sh 'sleep 30'  // Simple approach with fixed delay
                         
-                        // Or better, use a health check loop (more reliable)
                         sh '''
                             timeout=60
                             while ! curl -s http://localhost:8083/ > /dev/null; do
