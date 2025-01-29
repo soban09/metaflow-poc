@@ -1,13 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        METAFLOW_UI = 'metaflow-ui'
-        METAFLOW_SERVICE = 'metaflow-service'
-        FLOWS = 'flows'
-        SERVER_DIR = 'server'
-    }
-
     stages {
         stage('Configure Metaflow Directories'){
             steps{
@@ -43,14 +36,6 @@ pipeline {
                     }
                 }
             }
-            post {
-                success {
-                    echo 'Services cloned successfully!'
-                }
-                failure {
-                    echo 'There was an error cloning the repositories!'
-                }
-            }
         }
 
         stage('Build Metaflow UI'){
@@ -60,14 +45,6 @@ pipeline {
                         echo 'Building metaflow-ui image'
                         sh 'sudo docker build --tag metaflow-ui:latest .'
                     }
-                }
-            }
-            post{
-                success {
-                    echo 'Metaflow-UI image created successfully!'
-                }
-                failure {
-                    echo 'There was an error creating the Metaflow-UI image!'
                 }
             }
         }
@@ -102,19 +79,11 @@ pipeline {
                     }
                 }
             }
-            post {
-                success {
-                    echo 'Metaflow-UI Backend and UI started successfully!'
-                }
-                failure {
-                    echo 'There was an error running the Metaflow services!'
-                }
-            }
         }
 
         stage('Run Metaflow Pipeline') {
             steps {
-                dir("${env.FLOWS}") {
+                dir("flows") {
                     script {
                         echo "Running Metaflow Pipeline..."
                         sh 'sudo docker compose up'
@@ -125,7 +94,7 @@ pipeline {
         
         stage('Run Flask App') {
             steps {
-                dir("${env.SERVER_DIR}") {
+                dir("server") {
                     script {
                         echo "Running Flask App..."
                         sh 'sudo docker compose up -d'
