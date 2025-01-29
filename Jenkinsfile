@@ -12,18 +12,16 @@ pipeline {
         stage('Configure Metaflow Directories'){
             steps{
                 script{
-                    def repoDirectory = "${env.METAFLOW_UI}"
-                    if (!fileExists(repoDirectory)) {
+                    if (!fileExists("metaflow-ui")) {
                         echo "Creating metaflow-ui directory..."
-                        sh "mkdir ${repoDirectory}" 
+                        sh "mkdir metaflow-ui" 
                     } else {
                         echo "Repository already exists!"
                     }
 
-                    repoDirectory = "${env.METAFLOW_SERVICE}"
-                    if (!fileExists(repoDirectory)) {
+                    if (!fileExists("metaflow-service")) {
                         echo "Creating metaflow-service directory..."
-                        sh "mkdir ${repoDirectory}" 
+                        sh "mkdir metaflow-service" 
                     } else {
                         echo "Repository already exists!"
                     }
@@ -34,7 +32,7 @@ pipeline {
         stage('Clone Metaflow UI'){
             steps{
                 script{
-                    dir("${env.METAFLOW_UI}"){
+                    dir("metaflow-ui"){
                         sh 'Cloning into metaflow-ui...'
                         git 'https://github.com/Netflix/metaflow-ui.git'
                     }
@@ -53,7 +51,7 @@ pipeline {
         stage('Clone Metaflow service'){
             steps{
                 script{
-                    dir("${env.METAFLOW_SERVICE}"){
+                    dir("metaflow-service"){
                         sh 'Cloning into metaflow-service...'
                         git 'https://github.com/Netflix/metaflow-service.git'
                     }
@@ -71,7 +69,7 @@ pipeline {
 
         stage('Build Metaflow UI'){
             steps(){
-                dir("${env.METAFLOW_UI}") {
+                dir("metaflow-ui") {
                     script{
                         sh "pwd"
                         sh "ls -a"
@@ -92,7 +90,7 @@ pipeline {
 
         stage('Run Metaflow UI Backend'){
             steps(){
-                dir("${env.METAFLOW_SERVICE}") {
+                dir("metaflow-service") {
                     script{
                         sh "pwd"
                         sh "ls -a"
