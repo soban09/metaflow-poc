@@ -9,14 +9,41 @@ pipeline {
     }
 
     stages {
+        stage('Configure Metaflow Directories'){
+            steps{
+                script{
+                    def repoDirectory = "${env.METAFLOW_UI}"
+                    if (!fileExists(repoDirectory)) {
+                        echo "Creating metaflow-ui directory..."
+                        sh "mkdir ${repoDirectory}" 
+                    } else {
+                        echo "Repository already exists!"
+                    }
+
+                    repoDirectory = "${env.METAFLOW_SERVICE}"
+                    if (!fileExists(repoDirectory)) {
+                        echo "Creating metaflow-service directory..."
+                        sh "mkdir ${repoDirectory}" 
+                    } else {
+                        echo "Repository already exists!"
+                    }
+
+                }
+            }
+        }
         stage('Clone Metaflow services'){
             steps{
-                script {
-                    echo "Cloning the metaflow-ui repository..."
-                    git 'https://github.com/Netflix/metaflow-ui.git'
-
-                    echo "Cloning the metaflow-service repository..."
-                    git 'https://github.com/Netflix/metaflow-service.git'
+                dir("${env.METAFLOW_UI}"){
+                    script{
+                        sh 'Cloning into metaflow-ui...'
+                        git 'https://github.com/Netflix/metaflow-ui.git'
+                    }
+                }
+                dir("${env.METAFLOW_SERVICE}"){
+                    script{
+                        sh 'Cloning into metaflow-service...'
+                        git 'https://github.com/Netflix/metaflow-service.git'
+                    }
                 }
             }
             post {
