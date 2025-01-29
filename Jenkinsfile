@@ -31,16 +31,29 @@ pipeline {
                 }
             }
         }
-        stage('Clone Metaflow services'){
+        stage('Clone Metaflow UI'){
             steps{
-                dir("${env.METAFLOW_UI}"){
-                    script{
+                script{
+                    dir("${env.METAFLOW_UI}"){
                         sh 'Cloning into metaflow-ui...'
                         git 'https://github.com/Netflix/metaflow-ui.git'
                     }
                 }
-                dir("${env.METAFLOW_SERVICE}"){
-                    script{
+            }
+            post {
+                success {
+                    echo 'Services cloned successfully!'
+                }
+                failure {
+                    echo 'There was an error cloning the repositories!'
+                }
+            }
+        }
+
+        stage('Clone Metaflow service'){
+            steps{
+                script{
+                    dir("${env.METAFLOW_SERVICE}"){
                         sh 'Cloning into metaflow-service...'
                         git 'https://github.com/Netflix/metaflow-service.git'
                     }
