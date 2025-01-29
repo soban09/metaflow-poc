@@ -33,7 +33,7 @@ pipeline {
             steps{
                 script{
                     dir("metaflow-ui"){
-                        sh 'Cloning into metaflow-ui...'
+                        echo 'Cloning into metaflow-ui...'
                         git 'https://github.com/Netflix/metaflow-ui.git'
                     }
                 }
@@ -52,7 +52,7 @@ pipeline {
             steps{
                 script{
                     dir("metaflow-service"){
-                        sh 'Cloning into metaflow-service...'
+                        echo 'Cloning into metaflow-service...'
                         git 'https://github.com/Netflix/metaflow-service.git'
                     }
                 }
