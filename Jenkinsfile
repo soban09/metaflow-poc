@@ -60,14 +60,14 @@ pipeline {
                         echo 'Building metaflow-ui image'
                         sh 'sudo docker build --tag metaflow-ui:latest .'
                     }
-                    post{
-                        success {
-                            echo 'Metaflow-UI image created successfully!'
-                        }
-                        failure {
-                            echo 'There was an error creating the Metaflow-UI image!'
-                        }
-                    }
+                }
+            }
+            post{
+                success {
+                    echo 'Metaflow-UI image created successfully!'
+                }
+                failure {
+                    echo 'There was an error creating the Metaflow-UI image!'
                 }
             }
         }
@@ -80,14 +80,14 @@ pipeline {
                         sh 'sudo docker compose -f docker-compose.development.yml up'
                         sh 'sudo docker run -d -p 3000:3000 -e METAFLOW_SERVICE=http://localhost:8083/ metaflow-ui:latest'
                     }
-                    post{
-                        success {
-                            echo 'Metaflow-UI Backend started successfully!'
-                        }
-                        failure {
-                            echo 'There was an error running the Metaflow-UI Backend!'
-                        }
-                    }
+                }
+            }
+            post{
+                success {
+                    echo 'Metaflow-UI Backend started successfully!'
+                }
+                failure {
+                    echo 'There was an error running the Metaflow-UI Backend!'
                 }
             }
         }
