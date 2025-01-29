@@ -1,5 +1,6 @@
 *venv*
 *.
+*ipynb
 .metaflow
 metaflow-ui
 metaflow-service
