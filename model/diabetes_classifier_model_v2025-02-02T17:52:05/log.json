@@ -1,0 +1,28 @@
+[
+    {
+        "request": {
+            "data": [
+                8,
+                171,
+                42,
+                29,
+                160,
+                35.48,
+                0.08,
+                22
+            ],
+            "features": [
+                "Pregnancies",
+                "PlasmaGlucose",
+                "DiastolicBloodPressure",
+                "TricepsThickness",
+                "SerumInsulin",
+                "BMI",
+                "DiabetesPedigree",
+                "Age"
+            ]
+        },
+        "response": "Not Diabetic",
+        "time": "2025-02-02T18:54:36"
+    }
+]
