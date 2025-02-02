@@ -12,21 +12,23 @@ class RandomForrest:
         self.model = None
 
     def load(self):
-        files = None
         latest_model_path = None
+        model_folder_path = './model'
         max_date = None
 
-        for folders, _, files in os.walk('./model'):
-            files = files
+        for folder in os.listdir(model_folder_path):
+            if os.path.isdir(os.path.join(model_folder_path, folder)):
+                print(folder)
+                datestr = folder.split('v')[1]
+                date = datetime.strptime(datestr, '%Y-%m-%dT%H:%M:%S')
+                if (max_date is None) or (date > max_date):
+                    max_date = date
+                    latest_model_path = folder
+        
+        if latest_model_path is None:
+            raise("No model folder was found, please train a mode first!")
 
-        for file in files:
-            datestr = file.split('v')[1].split('.')[0]
-            date = datetime.strptime(datestr, '%Y-%m-%dT%H:%M:%S')
-            if (max_date is None) or (date > max_date):
-                max_date = date
-                latest_model_path = file
-
-        model_path = os.path.join('model', latest_model_path)
+        model_path = os.path.join(model_folder_path, latest_model_path, 'model.pkl')
 
         with open(model_path, 'rb') as model_file:
             self.model = pickle.load(model_file)

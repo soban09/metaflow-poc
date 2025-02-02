@@ -6,7 +6,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 from datetime import datetime
-import pickle, os, logging
+import pickle, os, logging, json
 
 # Set up logging
 logger = logging.getLogger()
@@ -124,14 +124,16 @@ class MachineLearningFlow(FlowSpec):
         logger.info("Evaluating the model...")
 
         predictions = self.model.predict(self.test_features)
-        self.accuracy = accuracy_score(self.test_labels, predictions)
-        self.precision = precision_score(self.test_labels, predictions)
-        self.recall = recall_score(self.test_labels, predictions)
-        self.f1 = f1_score(self.test_labels, predictions)
-        self.cm = confusion_matrix(self.test_labels, predictions)
+        self.model_info = {
+            "accuracy": accuracy_score(self.test_labels, predictions),
+            "precision": precision_score(self.test_labels, predictions),
+            "recall": recall_score(self.test_labels, predictions),
+            "f1_score": f1_score(self.test_labels, predictions),
+            "confusion_matrix": confusion_matrix(self.test_labels, predictions).tolist()
+        }
 
-        print(f"Evaluated. Model accuracy: {self.accuracy}")
-        logger.info(f"Evaluated. Model accuracy: {self.accuracy}")
+        print(f"Evaluated. Model accuracy: {self.model_info['accuracy']}")
+        logger.info(f"Evaluated. Model accuracy: {self.model_info['accuracy']}")
         self.next(self.save)
 
     @step
@@ -140,14 +142,26 @@ class MachineLearningFlow(FlowSpec):
         print("Saving the model...")
         logger.info("Saving the model...")
 
+        # Create a timestamp
         current_time_stamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-        self.model_version = "v"+current_time_stamp
-        self.model_path = os.path.join('model', 'diabetes_classifier_model_' + self.model_version + '.pkl')
-        with open(self.model_path, 'wb') as f:
+        self.model_info['model_version'] = "v" + current_time_stamp
+
+        # Create model directory
+        model_directory = os.path.join('model', 'diabetes_classifier_model_' + self.model_info['model_version'])
+        os.makedirs(model_directory, exist_ok=True)
+        self.model_info['model_path'] = os.path.join(model_directory, 'model.pkl')
+
+        # Save the model information as a JSON file inside the same directory
+        model_info_path = os.path.join(model_directory, 'model_info.json')
+        with open(model_info_path, 'w') as json_file:
+            json.dump(self.model_info, json_file, indent=4)
+
+        # Save the model to the new directory
+        with open(self.model_info['model_path'], 'wb') as f:
             pickle.dump(self.model, f)
 
-        print("Model saved saved to directory ./model")
-        logger.info("Model saved saved to directory ./model")
+        print(f"Model saved to directory {model_directory}")
+        logger.info(f"Model saved to directory {model_directory}")
         self.next(self.end)
 
     @step
