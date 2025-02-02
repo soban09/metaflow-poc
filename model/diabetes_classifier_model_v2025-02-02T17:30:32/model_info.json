@@ -1,0 +1,18 @@
+{
+    "accuracy": 0.933,
+    "precision": 0.9129129129129129,
+    "recall": 0.8888888888888888,
+    "f1_score": 0.9007407407407407,
+    "confusion_matrix": [
+        [
+            629,
+            29
+        ],
+        [
+            38,
+            304
+        ]
+    ],
+    "model_version": "v2025-02-02T17:30:32",
+    "model_path": "model/diabetes_classifier_model_v2025-02-02T17:30:32/model.pkl"
+}
